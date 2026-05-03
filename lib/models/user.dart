@@ -40,6 +40,9 @@ class User {
   String? userName;
   String? userEmail;
 
+  // Stores the image as raw bytes so it persists in Isar without relying on
+  // a file path that may change between app sessions.
+  List<byte>? photo;
 
   bool isSynced = false;
 

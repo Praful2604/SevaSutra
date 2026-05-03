@@ -178,39 +178,7 @@ class _ProfileState extends State<Profile> {
                 ),
               ),
 
-              const Text("Performance",
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600)),
 
-              const SizedBox(height: 10),
-
-              GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: dashboardItems.length,
-                gridDelegate:
-                const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 12,
-                  mainAxisSpacing: 12,
-                ),
-                itemBuilder: (context, index) {
-                  final item = dashboardItems[index];
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: Colors.green.shade100,
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(item["icon"], size: 40, color: Colors.blue),
-                        const SizedBox(height: 10),
-                        Text(item["title"]),
-                      ],
-                    ),
-                  );
-                },
-              ),
 
               const SizedBox(height: 10),
 

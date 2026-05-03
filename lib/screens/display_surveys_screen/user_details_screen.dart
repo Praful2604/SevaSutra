@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 
 import '../../../models/user.dart';
@@ -70,7 +72,38 @@ class UserDetailScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 10,),
+              const SizedBox(height: 10),
+
+              // 🔹 Profile Photo — tap to view full screen
+              Center(
+                child: GestureDetector(
+                  onTap: () {
+                    if (user.photo != null && user.photo!.isNotEmpty) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => _FullScreenPhoto(
+                            photoBytes: Uint8List.fromList(user.photo!),
+                            name: user.name ?? 'Photo',
+                          ),
+                        ),
+                      );
+                    }
+                  },
+                  child: CircleAvatar(
+                    radius: 60,
+                    backgroundColor: Colors.grey[300],
+                    backgroundImage: (user.photo != null && user.photo!.isNotEmpty)
+                        ? MemoryImage(Uint8List.fromList(user.photo!))
+                        : null,
+                    child: (user.photo == null || user.photo!.isEmpty)
+                        ? const Icon(Icons.person, size: 60, color: Colors.grey)
+                        : null,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+
               const Text("Beneficiary Information",
                   style: TextStyle(fontSize: 18,fontWeight: FontWeight.w700)),
         Container(
@@ -268,6 +301,36 @@ class UserDetailScreen extends StatelessWidget {
         
         
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Full-screen photo viewer with pinch-to-zoom
+class _FullScreenPhoto extends StatelessWidget {
+  final Uint8List photoBytes;
+  final String name;
+
+  const _FullScreenPhoto({required this.photoBytes, required this.name});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        iconTheme: const IconThemeData(color: Colors.white),
+        title: Text(name, style: const TextStyle(color: Colors.white)),
+      ),
+      body: Center(
+        child: InteractiveViewer(
+          minScale: 0.5,
+          maxScale: 5.0,
+          child: Image.memory(
+            photoBytes,
+            fit: BoxFit.contain,
           ),
         ),
       ),

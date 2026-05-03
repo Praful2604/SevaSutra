@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
 import '../../main.dart';
@@ -57,15 +59,21 @@ class _DisplayUsersScreenState extends State<DisplayUsersScreen> {
                 ),
                 child: ListTile(
 
-                  // 🔹 Avatar
+                  // 🔹 Avatar — show saved photo if available, else initial
                   leading: CircleAvatar(
+                    radius: 26,
                     backgroundColor: Colors.green,
-                    child: Text(
-                      (user.name != null && user.name!.isNotEmpty)
-                          ? user.name![0].toUpperCase()
-                          : "U",
-                      style: const TextStyle(color: Colors.white),
-                    ),
+                    backgroundImage: (user.photo != null && user.photo!.isNotEmpty)
+                        ? MemoryImage(Uint8List.fromList(user.photo!))
+                        : null,
+                    child: (user.photo == null || user.photo!.isEmpty)
+                        ? Text(
+                            (user.name != null && user.name!.isNotEmpty)
+                                ? user.name![0].toUpperCase()
+                                : "U",
+                            style: const TextStyle(color: Colors.white),
+                          )
+                        : null,
                   ),
 
                   // 🔹 Name

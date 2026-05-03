@@ -32,6 +32,9 @@ class _MainScreenState extends State<MainScreen> {
       Dashboard(
         userName: widget.userName,
         userEmail: widget.userEmail,
+        onNavigate: (index) {
+          setState(() => _selectedIndex = index);
+        },
       ),
       SurveysScreen(
         userName: widget.userName,

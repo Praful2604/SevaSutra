@@ -9,11 +9,14 @@ import 'package:sevasutra_flutter/screens/surveys_functions_screen/online_saved_
 class Dashboard extends StatefulWidget {
   final String userName;
   final String userEmail;
+  /// Called with the bottom-nav index to switch tabs from quick actions
+  final void Function(int index)? onNavigate;
 
   const Dashboard({
     super.key,
     required this.userName,
     required this.userEmail,
+    this.onNavigate,
   });
 
   @override
@@ -62,11 +65,11 @@ class _DashboardState extends State<Dashboard> {
     {"title": "Coverage", "icon": Icons.star_border_outlined,"count":0},
   ];
 
-  final List<Map<String, dynamic>> quickActions = [
-    {"title": "New Survey", "icon": Icons.add,},
-    {"title": "View Report", "icon": Icons.bar_chart_outlined},
-    {"title": "Sync Now", "icon": Icons.sync},
-    {"title": "Emergency", "icon": Icons.call},
+  final List<_QuickAction> quickActions = [
+    _QuickAction(title: "New Survey",  icon: Icons.add,               color: Colors.green,  navIndex: 1),
+    _QuickAction(title: "View Report", icon: Icons.bar_chart_outlined, color: Colors.blue,   navIndex: 3),
+    _QuickAction(title: "Sync Now",    icon: Icons.sync,               color: Colors.orange, navIndex: 2),
+    _QuickAction(title: "Emergency",   icon: Icons.call,               color: Colors.red,    navIndex: -1),
   ];
 //// NAVIGATION FUNCTION
   void navigateToPage(BuildContext context, String title,String count) {
@@ -276,33 +279,40 @@ drawer: CommonDrawer(userName: widget.userName,userEmail: widget.userEmail,),
                   itemBuilder: (context, index) {
                     final item = quickActions[index];
 
-                    return Container(
-                      decoration: BoxDecoration(
-                        color: Colors.blue.shade100,
-                        borderRadius: BorderRadius.circular(15),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 4,
-                            offset: Offset(2, 2),
-                          )
-                        ],
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            item["icon"],
-                            size: 30,
-                            color: Colors.blue,
-                          ),
-                          const SizedBox(height: 5),
-                          Text(
-                            item["title"],
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(fontSize: 12),
-                          ),
-                        ],
+                    return GestureDetector(
+                      onTap: () {
+                        if (item.navIndex >= 0) {
+                          widget.onNavigate?.call(item.navIndex);
+                        }
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: item.color.withOpacity(0.15),
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 4,
+                              offset: Offset(2, 2),
+                            )
+                          ],
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(item.icon, size: 30, color: item.color),
+                            const SizedBox(height: 5),
+                            Text(
+                              item.title,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                color: item.color,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },
@@ -370,4 +380,19 @@ Divider(),
       ),
     );
   }
+}
+
+/// Typed model for quick action items — avoids unsafe Map<String, dynamic> casts
+class _QuickAction {
+  final String title;
+  final IconData icon;
+  final Color color;
+  final int navIndex;
+
+  const _QuickAction({
+    required this.title,
+    required this.icon,
+    required this.color,
+    required this.navIndex,
+  });
 }

@@ -111,6 +111,13 @@ class _ScreenOneState extends State<ScreenOne> {
 
 //// NEW SAVEDATA FUNCTION
   Future<void> submitData() async {
+    // Read image bytes if a photo was picked, so it is stored inside Isar
+    // rather than as a file path that can become stale.
+    List<byte>? photoBytes;
+    if (_image != null) {
+      photoBytes = await _image!.readAsBytes();
+    }
+
     final user = User()
       ..name = nameController.text
       ..age = int.tryParse(ageController.text)
@@ -136,7 +143,8 @@ class _ScreenOneState extends State<ScreenOne> {
       ..sugar = sugarController.text
       ..hemoglobin = hemoController.text
       ..medications = medsController.text
-      ..userEmail = widget.userEmail;
+      ..userEmail = widget.userEmail
+      ..photo = photoBytes; // 🔥 persist image bytes to Isar
     // 1. Ensure the transaction truly finishes
     await isar.writeTxn(() async {
       await isar.users.put(user);

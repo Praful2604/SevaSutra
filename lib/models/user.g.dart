@@ -107,48 +107,53 @@ const UserSchema = CollectionSchema(
       name: r'phone',
       type: IsarType.string,
     ),
-    r'pregnancyMonth': PropertySchema(
+    r'photo': PropertySchema(
       id: 18,
+      name: r'photo',
+      type: IsarType.byteList,
+    ),
+    r'pregnancyMonth': PropertySchema(
+      id: 19,
       name: r'pregnancyMonth',
       type: IsarType.string,
     ),
     r'pulse': PropertySchema(
-      id: 19,
+      id: 20,
       name: r'pulse',
       type: IsarType.string,
     ),
     r'religion': PropertySchema(
-      id: 20,
+      id: 21,
       name: r'religion',
       type: IsarType.string,
     ),
     r'sugar': PropertySchema(
-      id: 21,
+      id: 22,
       name: r'sugar',
       type: IsarType.string,
     ),
     r'temp': PropertySchema(
-      id: 22,
+      id: 23,
       name: r'temp',
       type: IsarType.string,
     ),
     r'userEmail': PropertySchema(
-      id: 23,
+      id: 24,
       name: r'userEmail',
       type: IsarType.string,
     ),
     r'userName': PropertySchema(
-      id: 24,
+      id: 25,
       name: r'userName',
       type: IsarType.string,
     ),
     r'water': PropertySchema(
-      id: 25,
+      id: 26,
       name: r'water',
       type: IsarType.string,
     ),
     r'weight': PropertySchema(
-      id: 26,
+      id: 27,
       name: r'weight',
       type: IsarType.string,
     )
@@ -264,6 +269,12 @@ int _userEstimateSize(
     }
   }
   {
+    final value = object.photo;
+    if (value != null) {
+      bytesCount += 3 + value.length;
+    }
+  }
+  {
     final value = object.pregnancyMonth;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
@@ -344,15 +355,16 @@ void _userSerialize(
   writer.writeString(offsets[15], object.name);
   writer.writeString(offsets[16], object.occupation);
   writer.writeString(offsets[17], object.phone);
-  writer.writeString(offsets[18], object.pregnancyMonth);
-  writer.writeString(offsets[19], object.pulse);
-  writer.writeString(offsets[20], object.religion);
-  writer.writeString(offsets[21], object.sugar);
-  writer.writeString(offsets[22], object.temp);
-  writer.writeString(offsets[23], object.userEmail);
-  writer.writeString(offsets[24], object.userName);
-  writer.writeString(offsets[25], object.water);
-  writer.writeString(offsets[26], object.weight);
+  writer.writeByteList(offsets[18], object.photo);
+  writer.writeString(offsets[19], object.pregnancyMonth);
+  writer.writeString(offsets[20], object.pulse);
+  writer.writeString(offsets[21], object.religion);
+  writer.writeString(offsets[22], object.sugar);
+  writer.writeString(offsets[23], object.temp);
+  writer.writeString(offsets[24], object.userEmail);
+  writer.writeString(offsets[25], object.userName);
+  writer.writeString(offsets[26], object.water);
+  writer.writeString(offsets[27], object.weight);
 }
 
 User _userDeserialize(
@@ -381,15 +393,16 @@ User _userDeserialize(
   object.name = reader.readStringOrNull(offsets[15]);
   object.occupation = reader.readStringOrNull(offsets[16]);
   object.phone = reader.readStringOrNull(offsets[17]);
-  object.pregnancyMonth = reader.readStringOrNull(offsets[18]);
-  object.pulse = reader.readStringOrNull(offsets[19]);
-  object.religion = reader.readStringOrNull(offsets[20]);
-  object.sugar = reader.readStringOrNull(offsets[21]);
-  object.temp = reader.readStringOrNull(offsets[22]);
-  object.userEmail = reader.readStringOrNull(offsets[23]);
-  object.userName = reader.readStringOrNull(offsets[24]);
-  object.water = reader.readStringOrNull(offsets[25]);
-  object.weight = reader.readStringOrNull(offsets[26]);
+  object.photo = reader.readByteList(offsets[18]);
+  object.pregnancyMonth = reader.readStringOrNull(offsets[19]);
+  object.pulse = reader.readStringOrNull(offsets[20]);
+  object.religion = reader.readStringOrNull(offsets[21]);
+  object.sugar = reader.readStringOrNull(offsets[22]);
+  object.temp = reader.readStringOrNull(offsets[23]);
+  object.userEmail = reader.readStringOrNull(offsets[24]);
+  object.userName = reader.readStringOrNull(offsets[25]);
+  object.water = reader.readStringOrNull(offsets[26]);
+  object.weight = reader.readStringOrNull(offsets[27]);
   return object;
 }
 
@@ -437,7 +450,7 @@ P _userDeserializeProp<P>(
     case 17:
       return (reader.readStringOrNull(offset)) as P;
     case 18:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readByteList(offset)) as P;
     case 19:
       return (reader.readStringOrNull(offset)) as P;
     case 20:
@@ -453,6 +466,8 @@ P _userDeserializeProp<P>(
     case 25:
       return (reader.readStringOrNull(offset)) as P;
     case 26:
+      return (reader.readStringOrNull(offset)) as P;
+    case 27:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -2868,6 +2883,159 @@ extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
     });
   }
 
+  QueryBuilder<User, User, QAfterFilterCondition> photoIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'photo',
+      ));
+    });
+  }
+
+  QueryBuilder<User, User, QAfterFilterCondition> photoIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'photo',
+      ));
+    });
+  }
+
+  QueryBuilder<User, User, QAfterFilterCondition> photoElementEqualTo(
+      int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'photo',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<User, User, QAfterFilterCondition> photoElementGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'photo',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<User, User, QAfterFilterCondition> photoElementLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'photo',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<User, User, QAfterFilterCondition> photoElementBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'photo',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<User, User, QAfterFilterCondition> photoLengthEqualTo(
+      int length) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'photo',
+        length,
+        true,
+        length,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<User, User, QAfterFilterCondition> photoIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'photo',
+        0,
+        true,
+        0,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<User, User, QAfterFilterCondition> photoIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'photo',
+        0,
+        false,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<User, User, QAfterFilterCondition> photoLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'photo',
+        0,
+        true,
+        length,
+        include,
+      );
+    });
+  }
+
+  QueryBuilder<User, User, QAfterFilterCondition> photoLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'photo',
+        length,
+        include,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<User, User, QAfterFilterCondition> photoLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'photo',
+        lower,
+        includeLower,
+        upper,
+        includeUpper,
+      );
+    });
+  }
+
   QueryBuilder<User, User, QAfterFilterCondition> pregnancyMonthIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -4963,6 +5131,12 @@ extension UserQueryWhereDistinct on QueryBuilder<User, User, QDistinct> {
     });
   }
 
+  QueryBuilder<User, User, QDistinct> distinctByPhoto() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'photo');
+    });
+  }
+
   QueryBuilder<User, User, QDistinct> distinctByPregnancyMonth(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -5140,6 +5314,12 @@ extension UserQueryProperty on QueryBuilder<User, User, QQueryProperty> {
   QueryBuilder<User, String?, QQueryOperations> phoneProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'phone');
+    });
+  }
+
+  QueryBuilder<User, List<int>?, QQueryOperations> photoProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'photo');
     });
   }
 
